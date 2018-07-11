@@ -5,10 +5,9 @@
     <title>Is my bus delayed</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-    <script
-            src="https://code.jquery.com/jquery-3.3.1.min.js"
-            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.0/dist/sweetalert2.all.min.js"></script>
+    <script src="index.js"></script>
 </head>
 
 <body>
@@ -35,6 +34,8 @@
                 <ul>
                     <li><a href="https://pandermatt.ch/">Pandermatt</a></li>
                     <li><a href="https://github.com/pandermatt/is-my-bus-delayed">GitHub</a></li>
+                    <li><a onclick="showSettings()">Settings</a></li>
+                    <li><a onclick="showConnection()">Search Connection</a></li>
                 </ul>
             </div>
         </nav>
@@ -43,51 +44,3 @@
 </body>
 
 </html>
-
-<script>
-    let maxDelay = [0, 0, 0, 0];
-    let date = undefined;
-    let nextDate = undefined;
-    let current = undefined;
-    $.getJSON('http://transport.opendata.ch/v1/connections?from=wallisellen&to=flughafen&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=4&transportations%5B%5D=bus&transportations%5B%5D=tram', function (data) {
-        $.each(data.connections, function (index, value) {
-            if (current === undefined) {
-                current = value.products;
-                $('#bus-first').html(value.products[0]);
-                $('#bus-first').addClass(value.sections[0].journey.operator.replace(/\s/g, ''));
-                if (value.products[1] != undefined) {
-                    $('#bus-next').html(value.products[1]);
-                    $('#bus-next').addClass(value.sections[1].journey.operator.replace(/\s/g, ''));
-                }
-            }
-            if (value.products[0] == current[0]) {
-                console.log(value);
-                $.each(value.sections[0].journey.passList, function (_, value) {
-                    if (date === undefined) {
-                        date = new Date(value.departureTimestamp * 1000);
-                    }
-                    if (index > 1 && nextDate === undefined) {
-                        nextDate = new Date(value.departureTimestamp * 1000);
-                    }
-                    if (value.delay > maxDelay[index]) {
-                        maxDelay[index] = value.delay;
-                    }
-                });
-            }
-        });
-
-        if (maxDelay[0] > 0) {
-            $('#message').html("Yes");
-            $('#delay').html(maxDelay[0] + "'")
-        } else if (maxDelay[1] > 0) {
-            $('#message').html("Probability");
-            $('#delay').html(maxDelay[1] + "'")
-        } else {
-            $('#message').html("No");
-        }
-
-        $('#departure').html(("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + " - Next: " +
-            ("0" + nextDate.getHours()).slice(-2) + ":" + ("0" + nextDate.getMinutes()).slice(-2));
-    });
-</script>
-
