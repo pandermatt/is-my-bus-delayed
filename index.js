@@ -92,7 +92,7 @@ $(document).ready(function () {
         $('.navbar-menu').toggleClass('is-active');
     });
 
-    document.addEventListener('touchstart', function (e) {
-        e.preventDefault();
-    });
+    document.ontouchmove = function(event){
+        event.preventDefault();
+    }
 });
