@@ -18,7 +18,7 @@
     </div>
     <div class="hero-body">
         <div class="container">
-            <div class="bus-label">795</div>
+            <div class="bus-label">0</div>
             <h2 class="subtitle" id="message">
                 ...
             </h2>
@@ -32,8 +32,8 @@
         <nav class="tabs is-boxed is-fullwidth">
             <div class="container">
                 <ul>
-                    <li><a>Pandermatt</a></li>
-                    <li><a>GitHub</a></li>
+                    <li><a href="https://pandermatt.ch/">Pandermatt</a></li>
+                    <li><a href="https://github.com/pandermatt/is-my-bus-delayed">GitHub</a></li>
                 </ul>
             </div>
         </nav>
@@ -46,12 +46,23 @@
 <script>
     let maxDelay = [0, 0, 0, 0];
     let date = undefined;
-    $.getJSON('http://transport.opendata.ch/v1/connections?from=wallisellen&to=flughafen&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=2&transportations%5B%5D=bus', function (data) {
+    let nextDate = undefined;
+    let current = undefined;
+    $.getJSON('http://transport.opendata.ch/v1/connections?from=wallisellen&to=flughafen&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=4&transportations%5B%5D=bus&transportations%5B%5D=tram', function (data) {
         $.each(data.connections, function (index, value) {
-            if (value.products == 759) {
+            if (current === undefined) {
+                current = value.products;
+                $('.bus-label').html(value.products);
+                $('.bus-label').addClass(value.sections[0].journey.operator.replace(/\s/g, ''));
+            }
+            if(value.products == current[0]) {
+                console.log(value);
                 $.each(value.sections[0].journey.passList, function (_, value) {
                     if (date === undefined) {
                         date = new Date(value.departureTimestamp * 1000);
+                    }
+                    if(index > 1 && nextDate === undefined){
+                        nextDate = new Date(value.departureTimestamp * 1000);
                     }
                     if (value.delay > maxDelay[index]) {
                         maxDelay[index] = value.delay;
@@ -70,7 +81,7 @@
             $('#message').html("No");
         }
 
-        $('#departure').html(date.getHours() + ":" + date.getMinutes())
+        $('#departure').html(date.getHours() + ":" + date.getMinutes() + " - Next: " + nextDate.getHours() + ":" + nextDate.getMinutes() )
     });
 </script>
 

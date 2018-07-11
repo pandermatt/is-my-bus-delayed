@@ -1,11 +1,28 @@
 .bus-label {
-    border: black solid 1px;
+    border-radius: 20px;
     display: inline-block;
     margin: auto;
     font-size: 100px;
     padding: 10px 20px;
-    background-color: white;
-    color: black;
+    min-width: 200px;
+    color: #ffffff;
+    background-color: #ffffff;
+}
+
+.VBG{
+    border: #000000 solid 1px;
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.VBZF{
+    color: #000000;
+    background-color: #92d6e3;
+}
+
+.SBB{
+    color: #ffffff;
+    border-color: #463378;
 }
 
 body {
