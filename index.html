@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Is my bus delayed</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+    <script
+            src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+            crossorigin="anonymous"></script>
+</head>
+
+<body>
+<section class="hero is-success is-fullheight">
+    <div class="hero-head">
+        <h1 class="site-title">Is my bus delayed?</h1>
+    </div>
+    <div class="hero-body">
+        <div class="container">
+            <div class="bus-label">795</div>
+            <h2 class="subtitle" id="message">
+                ...
+            </h2>
+            <p id="delay">
+            </p>
+            <p id="departure">
+            </p>
+        </div>
+    </div>
+    <div class="hero-foot">
+        <nav class="tabs is-boxed is-fullwidth">
+            <div class="container">
+                <ul>
+                    <li><a>Pandermatt</a></li>
+                    <li><a>GitHub</a></li>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</section>
+</body>
+
+</html>
+
+<script>
+    let maxDelay = [0, 0, 0, 0];
+    let date = undefined;
+    $.getJSON('http://transport.opendata.ch/v1/connections?from=wallisellen&to=flughafen&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=2&transportations%5B%5D=bus', function (data) {
+        $.each(data.connections, function (index, value) {
+            if (value.products == 759) {
+                $.each(value.sections[0].journey.passList, function (_, value) {
+                    if (date === undefined) {
+                        date = new Date(value.departureTimestamp * 1000);
+                    }
+                    if (value.delay > maxDelay[index]) {
+                        maxDelay[index] = value.delay;
+                    }
+                });
+            }
+        });
+
+        if (maxDelay[0] > 0) {
+            $('#message').html("Yes");
+            $('#delay').html(maxDelay[0] + "'")
+        } else if (maxDelay[1] > 0) {
+            $('#message').html("Probability");
+            $('#delay').html(maxDelay[1] + "'")
+        } else {
+            $('#message').html("No");
+        }
+
+        $('#departure').html(date.getHours() + ":" + date.getMinutes())
+    });
+</script>
+

@@ -1,0 +1,29 @@
+.bus-label {
+    border: black solid 1px;
+    display: inline-block;
+    margin: auto;
+    font-size: 100px;
+    padding: 10px 20px;
+    background-color: white;
+    color: black;
+}
+
+body {
+    text-align: center;
+}
+
+.site-title {
+    text-align: left;
+    font-weight: bold;
+    font-size: 30px;
+    padding: 10px;
+}
+
+h2.subtitle {
+    font-size: 80px;
+}
+
+#delay {
+    font-size: 50px;
+    margin-top: -40px;
+}
