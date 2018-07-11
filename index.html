@@ -18,7 +18,8 @@
     </div>
     <div class="hero-body">
         <div class="container">
-            <div class="bus-label">0</div>
+            <div class="bus-label" id="bus-first">0</div>
+            <div class="bus-label bus-label-next" id="bus-next"></div>
             <h2 class="subtitle" id="message">
                 ...
             </h2>
@@ -52,16 +53,20 @@
         $.each(data.connections, function (index, value) {
             if (current === undefined) {
                 current = value.products;
-                $('.bus-label').html(value.products);
-                $('.bus-label').addClass(value.sections[0].journey.operator.replace(/\s/g, ''));
+                $('#bus-first').html(value.products[0]);
+                $('#bus-first').addClass(value.sections[0].journey.operator.replace(/\s/g, ''));
+                if (value.products[1] != undefined) {
+                    $('#bus-next').html(value.products[1]);
+                    $('#bus-next').addClass(value.sections[1].journey.operator.replace(/\s/g, ''));
+                }
             }
-            if(value.products == current[0]) {
+            if (value.products[0] == current[0]) {
                 console.log(value);
                 $.each(value.sections[0].journey.passList, function (_, value) {
                     if (date === undefined) {
                         date = new Date(value.departureTimestamp * 1000);
                     }
-                    if(index > 1 && nextDate === undefined){
+                    if (index > 1 && nextDate === undefined) {
                         nextDate = new Date(value.departureTimestamp * 1000);
                     }
                     if (value.delay > maxDelay[index]) {
@@ -81,7 +86,8 @@
             $('#message').html("No");
         }
 
-        $('#departure').html(date.getHours() + ":" + date.getMinutes() + " - Next: " + nextDate.getHours() + ":" + nextDate.getMinutes() )
+        $('#departure').html(("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2) + " - Next: " +
+            ("0" + nextDate.getHours()).slice(-2) + ":" + ("0" + nextDate.getMinutes()).slice(-2));
     });
 </script>
 

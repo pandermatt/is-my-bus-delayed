@@ -9,20 +9,29 @@
     background-color: #ffffff;
 }
 
-.VBG{
-    border: #000000 solid 1px;
-    background-color: #ffffff;
-    color: #000000;
+.bus-label-next:empty {
+    display: none;
 }
 
-.VBZF{
+.VBG {
+    border: #000000 solid 1px;
+    color: #000000;
+    background-color: #ffffff;
+}
+
+.VBZF {
     color: #000000;
     background-color: #92d6e3;
 }
 
-.SBB{
+.SBB {
     color: #ffffff;
-    border-color: #463378;
+    background-color: #463378;
+}
+
+.PAG {
+    color: #000000;
+    background-color: #ffcc00;
 }
 
 body {
