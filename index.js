@@ -8,7 +8,7 @@ function update() {
     let nextDate = undefined;
     let current = undefined;
     var walk = false;
-    $.getJSON('http://transport.opendata.ch/v1/connections?from=' + from + '&to=' + to + '&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/walk&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=4&transportations%5B%5D=bus&transportations%5B%5D=tram', function (data) {
+    $.getJSON('https://transport.opendata.ch/v1/connections?from=' + from + '&to=' + to + '&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/walk&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=4&transportations%5B%5D=bus&transportations%5B%5D=tram', function (data) {
         $.each(data.connections, function (index, value) {
             let sections = value.sections.filter(function (item) {
                 return item.walk == null;
