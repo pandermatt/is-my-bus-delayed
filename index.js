@@ -54,7 +54,7 @@ function update() {
             $('#message').html("Yes");
             $('#delay').html(maxDelay[0] + "'")
         } else if (maxDelay[1] > 0) {
-            $('#message').html("Probability");
+            $('#message').html("Probably");
             $('#delay').html(maxDelay[1] + "'")
         } else {
             $('#message').html("No");
