@@ -82,6 +82,13 @@ async function showSettings() {
 
 function showConnection() {
     url = "https://www.sbb.ch/de/kaufen/pages/fahrplan/fahrplan.xhtml?von="
-        + localStorage.from + "&nach=" + localStorage.to
+        + localStorage.from + "&nach=" + localStorage.to;
     window.open(url, '_blank');
 }
+
+$( document ).ready(function() {
+    $('.navbar-burger').click(function () {
+        $('.navbar-burger').toggleClass('is-active');
+        $('.navbar-menu').toggleClass('is-active');
+    });
+});

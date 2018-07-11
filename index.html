@@ -3,17 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <title>Is my bus delayed</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.0/dist/sweetalert2.all.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <script src="index.js"></script>
 </head>
 
 <body>
 <section class="hero is-success is-fullheight">
     <div class="hero-head">
-        <h1 class="site-title">Is my bus delayed?</h1>
+        <nav class="navbar">
+            <div class="container">
+                <div class="navbar-brand">
+                    <a class="navbar-item">
+                        Is my bus delayed?
+                    </a>
+                    <span class="navbar-burger burger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                      </span>
+                </div>
+                <div class="navbar-menu">
+                    <div class="navbar-end">
+                        <a class="navbar-item" onclick="showConnection()">
+                            Search Connection
+                        </a>
+                        <span class="navbar-item">
+                            <a class="button is-primary is-inverted" onclick="showSettings()">
+                                <span class="icon">
+                                  <i class="fas fa-cog"></i>
+                                </span>
+                                <span>Settings</span>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </div>
     <div class="hero-body">
         <div class="container">
@@ -34,8 +64,6 @@
                 <ul>
                     <li><a href="https://pandermatt.ch/">Pandermatt</a></li>
                     <li><a href="https://github.com/pandermatt/is-my-bus-delayed">GitHub</a></li>
-                    <li><a onclick="showSettings()">Settings</a></li>
-                    <li><a onclick="showConnection()">Search Connection</a></li>
                 </ul>
             </div>
         </nav>

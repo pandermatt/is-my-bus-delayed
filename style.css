@@ -38,11 +38,8 @@ body {
     text-align: center;
 }
 
-.site-title {
-    text-align: left;
+.navbar-brand {
     font-weight: bold;
-    font-size: 30px;
-    padding: 10px;
 }
 
 h2.subtitle {
