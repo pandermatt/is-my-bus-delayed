@@ -1,5 +1,6 @@
-const from = localStorage.from || 'Wallisellen';
-const to = localStorage.to || 'Flughafen';
+let from = localStorage.from || 'Wallisellen';
+let to = localStorage.to || 'Flughafen';
+let showTrain = false;
 update();
 
 function update() {
@@ -7,8 +8,19 @@ function update() {
     let date = undefined;
     let nextDate = undefined;
     let current = undefined;
-    var walk = false;
-    $.getJSON('https://transport.opendata.ch/v1/connections?from=' + from + '&to=' + to + '&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/walk&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=4&transportations%5B%5D=bus&transportations%5B%5D=tram', function (data) {
+    let transportations = '&transportations%5B%5D=bus&transportations%5B%5D=tram';
+    if (showTrain) {
+        transportations = '';
+    }
+    $.getJSON('https://transport.opendata.ch/v1/connections?from=' + from + '&to=' + to + '&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/walk&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=4' + transportations, function (data) {
+        if(data.connections.length === 0){
+            swal({
+                type: 'error',
+                title: 'No connection found'
+            });
+            $('#message').html('No connection found');
+            return;
+        }
         $.each(data.connections, function (index, value) {
             let sections = value.sections.filter(function (item) {
                 return item.walk == null;
@@ -74,9 +86,20 @@ async function showSettings() {
     });
 
     if (formValues) {
-        localStorage.from = formValues[0];
-        localStorage.to = formValues[1];
-        location.reload();
+        from = formValues[0];
+        to = formValues[1];
+        localStorage.from = from;
+        localStorage.to = to;
+        reset();
+        update();
+
+        swal({
+            position: 'top-end',
+            type: 'success',
+            title: 'Settings has been saved',
+            showConfirmButton: false,
+            timer: 1500
+        })
     }
 }
 
@@ -86,13 +109,34 @@ function showConnection() {
     window.open(url, '_blank');
 }
 
+function toggleTrain() {
+    showTrain = !showTrain;
+    localStorage.showTrain = showTrain;
+    $('.show-train').toggleClass('is-rounded');
+    if (showTrain) {
+        $('.show-train-text').html('Hide Train');
+    } else {
+        $('.show-train-text').html('Show Train');
+    }
+    reset();
+    update();
+}
+
+function reset() {
+    $('#message').html("...");
+    $('#departure').html("");
+    $('#delay').html("");
+    let $bus = $('#bus-first');
+    let $busNext = $('#bus-next');
+    $bus.html("<div class=\"sp sp-3balls\"></div>");
+    $busNext.html("");
+    $bus.attr('class', 'bus-label');
+    $busNext.attr('class', 'bus-label bus-label-next');
+}
+
 $(document).ready(function () {
     $('.navbar-burger').click(function () {
         $('.navbar-burger').toggleClass('is-active');
         $('.navbar-menu').toggleClass('is-active');
     });
-
-    document.ontouchmove = function(event){
-        event.preventDefault();
-    }
 });

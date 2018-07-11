@@ -10,8 +10,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.25.0/dist/sweetalert2.all.min.js"></script>
     <script defer src="https://use.fontawesome.com/releases/v5.1.0/js/all.js"></script>
     <script src="index.js"></script>
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
     <link rel="apple-touch-icon" sizes="180x180" href="https://pandermatt.ch/is-my-bus-delayed/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://pandermatt.ch/is-my-bus-delayed/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://pandermatt.ch/is-my-bus-delayed/favicon-16x16.png">
@@ -41,8 +41,19 @@
                 <div class="navbar-menu">
                     <div class="navbar-end">
                         <a class="navbar-item" onclick="showConnection()">
-                            Search Connection
+                            <span class="icon">
+                                <i class="fas fa-external-link-square-alt"></i>
+                            </span>
+                            <span>Search Connection</span>
                         </a>
+                        <span class="navbar-item">
+                            <a class="button is-primary is-inverted show-train" onclick="toggleTrain()">
+                                <span class="icon">
+                                  <i class="fas fa-train"></i>
+                                </span>
+                                <span class="show-train-text">Show train</span>
+                            </a>
+                        </span>
                         <span class="navbar-item">
                             <a class="button is-primary is-inverted" onclick="showSettings()">
                                 <span class="icon">
@@ -58,7 +69,9 @@
     </div>
     <div class="hero-body">
         <div class="container">
-            <div class="bus-label" id="bus-first">0</div>
+            <div class="bus-label" id="bus-first">
+                <div class="sp sp-3balls"></div>
+            </div>
             <div class="bus-label bus-label-next" id="bus-next"></div>
             <h2 class="subtitle" id="message">
                 ...
