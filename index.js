@@ -5,15 +5,17 @@ update();
 
 function update() {
     let maxDelay = [0, 0, 0, 0];
+    let nextDelay = [0, 0, 0, 0];
     let date = undefined;
     let nextDate = undefined;
     let current = undefined;
+    let transfer = undefined;
     let transportations = '&transportations%5B%5D=bus&transportations%5B%5D=tram';
     if (showTrain) {
         transportations = '';
     }
-    $.getJSON('https://transport.opendata.ch/v1/connections?from=' + from + '&to=' + to + '&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/walk&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=4' + transportations, function (data) {
-        if(data.connections.length === 0){
+    $.getJSON('https://transport.opendata.ch/v1/connections?from=' + from + '&to=' + to + '&fields%5B%5D=connections/sections/journey/name&fields%5B%5D=connections/sections/journey/operator&fields%5B%5D=connections/sections/journey&fields%5B%5D=connections/sections/walk&fields%5B%5D=connections/sections/journey/passList/delay&fields%5B%5D=connections/sections/journey/passList/departureTimestamp&fields%5B%5D=connections/products&limit=6' + transportations, function (data) {
+        if (data.connections.length === 0) {
             swal({
                 type: 'error',
                 title: 'No connection found'
@@ -28,15 +30,19 @@ function update() {
 
             if (current === undefined) {
                 current = value.products;
-                $('#bus-first').html(value.products[0]);
-                $('#bus-first').addClass(sections[0].journey.operator.replace(/\s/g, ''));
-                if (value.products[1] != undefined) {
-                    $('#bus-next').html(value.products[1]);
-                    $('#bus-next').addClass(sections[1].journey.operator.replace(/\s/g, ''));
+                let $bus = $('#bus-first');
+                $bus.html(value.products[0]);
+                $bus.addClass(sections[0].journey.operator.replace(/\s/g, ''));
+                if (value.products[1] !== undefined) {
+                    let $busNext = $('#bus-next');
+                    $busNext.html(value.products[1]);
+                    $busNext.addClass(sections[1].journey.operator.replace(/\s/g, ''));
                 }
             }
-            if (value.products[0] == current[0]) {
-                $.each(sections[0].journey.passList, function (_, value) {
+            if (value.products[0] === current[0]) {
+                // console.log(value);
+                let passList = sections[0].journey.passList;
+                $.each(passList, function (_, value) {
                     if (date === undefined) {
                         date = new Date(value.departureTimestamp * 1000);
                     }
@@ -47,6 +53,20 @@ function update() {
                         maxDelay[index] = value.delay;
                     }
                 });
+
+                if (sections[1] !== undefined) {
+                    let passListNext = sections[1].journey.passList;
+                    if (transfer === undefined) {
+                        let arrivalDate = new Date(passList[passList.length - 2].departureTimestamp * 1000);
+                        let departureDate = new Date(passListNext[0].departureTimestamp * 1000);
+                        transfer = Math.round(((departureDate - arrivalDate) / 1000) / 60) - maxDelay[0];
+                    }
+                    $.each(passListNext, function (_, value) {
+                        if (value.delay > nextDelay[index]) {
+                            nextDelay[index] = value.delay;
+                        }
+                    });
+                }
             }
         });
 
@@ -58,10 +78,16 @@ function update() {
             $('#delay').html(maxDelay[1] + "'")
         } else {
             $('#message').html("No");
+            if (nextDelay[0]) {
+                $('#delay').html($('#bus-next').html() + ": " + nextDelay[0] + "'")
+            }
         }
 
 
         time = ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+        if (transfer !== undefined) {
+            time += " (<i class=\"fas fa-walking\"></i> " + transfer + "') ";
+        }
         if (nextDate !== undefined) {
             time += " - Next: " +
                 ("0" + nextDate.getHours()).slice(-2) + ":" + ("0" + nextDate.getMinutes()).slice(-2);
@@ -132,6 +158,11 @@ function reset() {
     $busNext.html("");
     $bus.attr('class', 'bus-label');
     $busNext.attr('class', 'bus-label bus-label-next');
+}
+
+function refresh() {
+    reset();
+    update();
 }
 
 $(document).ready(function () {
