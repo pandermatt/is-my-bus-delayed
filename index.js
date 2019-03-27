@@ -70,6 +70,8 @@ function update() {
             }
         });
 
+        // TODO Error when API is not available
+
         if (maxDelay[0] > 0) {
             $('#message').html("Yes");
             $('#delay').html(maxDelay[0] + "'")

@@ -175,3 +175,9 @@ h2.subtitle {
         opacity: 0.25;
     }
 }
+
+@media (prefers-color-scheme: dark) {
+    .hero.is-success {
+        background-color: #263238 !important;
+    }
+}
