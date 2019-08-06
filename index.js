@@ -173,3 +173,12 @@ $(document).ready(function () {
         $('.navbar-menu').toggleClass('is-active');
     });
 });
+
+window.onload = () => {
+  'use strict';
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+             .register('./sw.js');
+  }
+}
