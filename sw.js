@@ -1,9 +1,5 @@
 var cacheName = 'is-my-bus-delayed';
 var filesToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/index.js'
 ];
 
 /* Start the service worker and cache all of the app's content */
