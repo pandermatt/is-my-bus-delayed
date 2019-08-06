@@ -1,4 +1,4 @@
-var cacheName = 'hello-pwa';
+var cacheName = 'is-my-bus-delayed';
 var filesToCache = [
   '/',
   '/index.html',
