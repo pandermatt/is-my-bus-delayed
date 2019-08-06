@@ -1,3 +1,12 @@
+window.onload = () => {
+  'use strict';
+
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+             .register('./sw.js');
+  }
+}
+
 let from = localStorage.from || 'Wallisellen';
 let to = localStorage.to || 'Flughafen';
 let showTrain = false;
@@ -173,12 +182,3 @@ $(document).ready(function () {
         $('.navbar-menu').toggleClass('is-active');
     });
 });
-
-window.onload = () => {
-  'use strict';
-
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-             .register('./sw.js');
-  }
-}
